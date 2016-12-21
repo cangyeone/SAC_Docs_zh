@@ -1,0 +1,23 @@
+language: node_js
+node_js: 4
+
+sudo: required
+dist: trusty
+branch:
+    only:
+        - gitbook
+
+install:
+    - sudo pip install ghp-import
+    - npm install -g gitbook-cli
+    - gitbook fetch
+    - gitbook install
+
+script:
+    - gitbook build
+
+after_success:
+    - git config --global user.name "Dongdong Tian"
+    - git config --global user.email "seisman.info@gmail.com"
+    - ghp-import -b gh-pages _book -m 'Update by travis automatically'
+    - git push "https://${GH_TOKEN}@${GH_REF}" gh-pages:gh-pages --force --quiet
